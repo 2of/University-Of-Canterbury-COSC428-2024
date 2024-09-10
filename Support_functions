@@ -1,0 +1,57 @@
+
+import numpy as np
+
+def compute_angles(points):
+    """
+    Compute the angles between each pair of points in the given list of 2.5d space MP points.
+    
+    Args:
+        points (list of tuples): List of 3D points in the form [(x1, y1, z1), (x2, y2, z2), ...].
+    
+    Returns:
+        list of float: List of angles (in radians) between each pair of points.
+    """
+    angles = []
+    num_points = len(points)
+    
+    for i in range(num_points):
+        for j in range(i + 1, num_points):
+            vector_i = np.array(points[i])
+            vector_j = np.array(points[j])
+            
+            vector_ij = vector_j - vector_i
+            
+            magnitude_i = np.linalg.norm(vector_i)
+            magnitude_j = np.linalg.norm(vector_j)
+            magnitude_ij = np.linalg.norm(vector_ij)
+            
+            cosine_angle = np.dot(vector_i, vector_j) / (magnitude_i * magnitude_j)
+            cosine_angle = np.clip(cosine_angle, -1.0, 1.0)
+            
+            angle_rad = np.arccos(cosine_angle)
+            
+            angles.append(angle_rad)
+    return angles
+
+
+
+
+def compute_velocity_from_deque(deque_points):
+    delta_time = 1  # Assuming the time interval between each position is 1 unit
+    x_positions = [pos[0] for pos in deque_points]
+    y_positions = [pos[1] for pos in deque_points]
+    average_velocity_x = (x_positions[-1] - x_positions[0]) / delta_time
+    average_velocity_y = (y_positions[-1] - y_positions[0]) / delta_time
+    
+    
+    return (average_velocity_x, average_velocity_y)
+
+
+import math
+
+def distance_between_points(point1, point2):
+    # print("I GOT ", point1, point2)
+    x1, y1, z1 = point1
+    x2, y2, z2 = point2
+    distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+    return distance
